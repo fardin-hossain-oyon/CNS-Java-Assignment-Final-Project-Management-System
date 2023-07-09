@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+  <meta charset="ISO-8859-1">
+  <title>Project Management Application</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding-top: 70px;
+    }
+
+    .navbar {
+      background-color: #333;
+      border-color: #333;
+    }
+
+    .navbar-brand {
+      color: #fff;
+      font-size: 24px;
+    }
+
+    .navbar-nav li a {
+      color: #fff;
+      font-size: 16px;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 30px;
+    }
+
+    .table {
+      background-color: #fff;
+    }
+
+    .table th {
+      font-size: 18px;
+      background-color: #343a40;
+      color: #fff;
+    }
+
+    .table td {
+      font-size: 16px;
+    }
+
+    .btn {
+      margin-right: 1px;
+      margin-bottom: 1px;
+    }
+    .block1 {
+      display: block;
+      width: 100%;
+      border: none;
+      background-color: darkcyan;
+      color: white;
+      padding: 6px 28px;
+      border-radius: 14px;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: center;
+      margin-right: 5px;
+      margin-bottom: 5px;
+    }
+
+    .block1:hover {
+      background-color: #ddd;
+      color: black;
+    }
+
+    .block2 {
+      display: block;
+      width: 100%;
+      border: none;
+      background-color: red;
+      color: white;
+      padding: 6px 28px;
+      border-radius: 14px;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: center;
+      margin-right: 5px;
+      margin-bottom: 5px;
+    }
+
+    .block2:hover {
+      background-color: #ddd;
+      color: black;
+    }
+
+
+    .block3 {
+      display: block;
+      width: 100%;
+      border: none;
+      background-color: green;
+      color: white;
+      padding: 6px 28px;
+      border-radius: 14px;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: center;
+      margin-right: 5px;
+      margin-bottom: 5px;
+    }
+
+    .block3:hover {
+      background-color: #ddd;
+      color: black;
+    }
+
+
+    .block4 {
+      display: block;
+      width: 100%;
+      background-color: darkred;
+      color: white;
+      padding: 6px 28px;
+      border-radius: 14px;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: center;
+      margin-right: 5px;
+      margin-bottom: 5px;
+      line-height: 100%;
+    }
+
+    .block4:hover {
+      background-color: #ddd;
+      color: black;
+    }
+
+
+  </style>
+</head>
+
+<body>
+<!-- create navigation bar (header) -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+              aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#" th:href="@{/}">Project Management System</a>
+    </div>
+
+    <div id="navbar1" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li sec:authorize="isAuthenticated()"><a th:href="@{/api/v1/projects}">Projects Json</a></li>
+      </ul>
+<!--    </div>-->
+
+<!--    <div id="navbar" class="collapse navbar-collapse">-->
+      <ul class="nav navbar-nav">
+        <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="row">
+    <h1 style="padding-left: 10px">Welcome, <span sec:authentication="principal.username">User</span>!</h1>
+  </div>
+
+  <div class="row">
+    <h1 style="color: #4caf50; padding-left: 10px">  Owned Projects:</h1>
+  </div>
+
+  <div class="row">
+    <div class="col text-right">
+      <form id="filterForm" class="form-inline" style="padding-right: 15px">
+        <div class="form-group" style="padding-right: 15px">
+          <label for="startDate">Start Date:</label>
+          <input type="date" id="startDate" name="startDate" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="endDate">End Date:</label>
+          <input type="date" id="endDate" name="endDate" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Filter</button>
+      </form>
+    </div>
+  </div>
+
+
+  <br>
+
+  <div>
+  <table class="table table-striped table-bordered">
+    <thead class="table-dark">
+    <tr>
+      <th style="text-align: center; vertical-align: top;">Project Name</th>
+      <th style="text-align: center; vertical-align: top;">Project Intro</th>
+      <th style="text-align: center; vertical-align: top;">Project Status</th>
+      <th style="text-align: center; vertical-align: top;">Project Start Date</th>
+      <th style="text-align: center; vertical-align: top;">Project End Date</th>
+      <th style="text-align: center; vertical-align: top;">Collaborators</th>
+      <th style="text-align: center; vertical-align: top;">Actions</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="project: ${projects}" align="CENTER">
+      <td th:text="${project.name}" style="vertical-align: top;"></td>
+      <td th:text="${project.intro}" style="vertical-align: top;"></td>
+      <td th:text="${project.status}" style="vertical-align: top;"></td>
+      <td th:text="${project.startDate}" style="vertical-align: top;"></td>
+      <td th:text="${project.endDate}" style="vertical-align: top;"></td>
+      <td>
+        <span th:each="sublist : ${project.members}" style="vertical-align: middle;">
+            <span th:text="${sublist.username}" style="vertical-align: middle;"></span>
+          <br>
+        </span>
+      </td>
+      <td>
+        <a th:href="@{/editProject/{id}(id=${project.id})}" class="block1">Update</a>
+
+        <a th:href="@{/deleteProject/{id}(id=${project.id})}" class="block2"
+           onclick="return confirm('Are you sure you want to delete this project?');">Delete</a>
+        <a th:href="@{/addProjectMembers/{id}(id=${project.id})}"
+           class="block3"
+           th:if = "${project.members.size() < 5}"> Add Members</a>
+
+        <a th:href="@{/removeProjectMember/{id}(id=${project.id})}"
+           class="block4"
+           th:if = "${project.members.size() > 0}">Remove Members</a>
+
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <a th:href="@{/newProject}" class="btn btn-primary btn-sm mb-3" style="font-size: 20px">Add Project</a>
+
+  </div>
+
+</div>
+
+<br>
+<br>
+<br>
+
+<div class="container">
+  <div class="row">
+    <h1 style="color: orchid; padding-left: 10px">Projects joined as a collaborator:</h1>
+  </div>
+
+
+  <table class="table table-striped table-bordered">
+    <thead class="table-dark">
+    <tr>
+      <th style="text-align: center; vertical-align: top;">Project Name</th>
+      <th style="text-align: center; vertical-align: top;">Owner Name</th>
+      <th style="text-align: center; vertical-align: top;">Collaborators</th>
+      <th style="text-align: center; vertical-align: top;">Project Intro</th>
+      <th style="text-align: center; vertical-align: top;">Project Status</th>
+      <th style="text-align: center; vertical-align: top;">Project Start Date</th>
+      <th style="text-align: center; vertical-align: top;">Project End Date</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="project: ${collaborations}" align="CENTER" >
+      <td th:text="${project.name}" style="vertical-align: top;"></td>
+      <td th:text="${project.owner.username}" style="vertical-align: top;"></td>
+
+      <td>
+        <span th:each="sublist : ${project.members}" style="vertical-align: top;">
+            <span th:text="${sublist.username}" style="vertical-align: top;"></span>
+          <br>
+        </span>
+      </td>
+
+      <td th:text="${project.intro}" style="vertical-align: top;"></td>
+      <td th:text="${project.status}" style="vertical-align: top;"></td>
+      <td th:text="${project.startDate}" style="vertical-align: top;"></td>
+      <td th:text="${project.endDate}" style="vertical-align: top;"></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="container">
+  <div class="row">
+    <h1 style="color: darkblue">Summary of all projects:</h1>
+
+    <table class="table table-striped table-bordered">
+      <thead class="table-dark">
+      <tr>
+        <th style="text-align: center">Project Name</th>
+        <th style="text-align: center">Owner Name</th>
+        <th style="text-align: center">Collaborators</th>
+        <th style="text-align: center">Project Timeline</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr th:each="project: ${allProjects}" align="CENTER" >
+        <td th:text="${project.name}" style="vertical-align: top;"></td>
+        <td th:text="${project.owner.username}" style="vertical-align: top;"></td>
+        <td>
+        <span th:each="sublist : ${project.members}" style="vertical-align: top;">
+            <span th:text="${sublist.username}" style="vertical-align: top;"></span>
+          <br>
+        </span>
+        </td>
+
+<!--        <td th:text="${project.intro}" style="vertical-align: middle;"></td>-->
+<!--        <td th:text="${project.status}" style="vertical-align: middle;"></td>-->
+        <td th:text="${project.startDate} +'   '+ ' TO ' +'   '+ ${project.endDate}" style="vertical-align: top;"></td>
+<!--        <td th:text="${project.endDate}" style="vertical-align: middle;"></td>-->
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+  </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous"></script>
+</body>
+
+
+<script>
+  $(document).ready(function() {
+    $('#filterForm').submit(function(e) {
+      e.preventDefault();
+      var startDate = $('#startDate').val();
+      var endDate = $('#endDate').val();
+
+      // Loop through each row in the table body
+      $('table tbody tr').each(function() {
+        var projectStartDate = $(this).find('td:eq(3)').text();
+        var projectEndDate = $(this).find('td:eq(4)').text();
+
+        // Show/hide rows based on the date filter
+        if ((startDate === '' || projectStartDate >= startDate) &&
+                (endDate === '' || projectEndDate <= endDate)) {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+    });
+  });
+</script>
+
+
+</html>

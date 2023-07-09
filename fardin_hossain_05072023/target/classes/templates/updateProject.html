@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Project Management System</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+    <!-- Brand -->
+    <a class="navbar-brand" href="#">Project Management System</a>
+
+    <!-- Toggler/collapsibe Button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/projects}">Project Management</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<br>
+<br>
+<div class = "container">
+    <!--		<a th:text="${project.name}">Author name:</a>-->
+    <!--		<input type="text" th:value="${project}">-->
+    <div class = "row">
+        <div class ="col-lg-6 col-md-6 col-sm-6 container justify-content-center card" >
+            <h1 class = "text-center"> Update Project </h1>
+            <div class = "card-body">
+                <form th:action="@{/editProject/{id} (id=${project.id})}" th:object = "${project}" method="POST" onsubmit="return submitFormErrorCheck()">
+                    <div class ="form-group">
+                        <label> Project Name </label>
+                        <input
+                                type = "text"
+                                name = "name"
+                                th:field = "*{name}"
+                                class = "form-control"
+                                placeholder="Enter Project Name"
+                        />
+                    </div>
+
+                    <div class ="form-group">
+                        <label> Project Intro </label>
+                        <input
+                                type = "text"
+                                name = "intro"
+                                th:field = "*{intro}"
+                                class = "form-control"
+                                placeholder="Enter Project Intro"
+                        />
+                    </div>
+
+
+
+<!--                    <div class ="form-group">-->
+<!--                        <label for="number-select">Select project status:</label>-->
+<!--                        <select id="number-select" name="number" th:field="*{status}" onchange="submitForm()">-->
+<!--                            <option value="4">0</option>-->
+<!--                            <option value="1">1</option>-->
+<!--                            <option value="2">2</option>-->
+<!--                            <option value="3">3</option>-->
+
+<!--                        </select>-->
+<!--                    </div>-->
+
+
+                    <div class ="form-group">
+                        <label> Project Start Date </label>
+                        <input
+                                type = "date"
+                                name = "startDate"
+                                th:field = "*{startDate}"
+                                class = "form-control"
+                                placeholder="Enter Start Date"/>
+                    </div>
+
+                    <div class ="form-group">
+                        <label> Project End Date </label>
+                        <input
+                                type = "date"
+                                name = "endDate"
+                                th:field = "*{endDate}"
+                                class = "form-control"
+                                placeholder="Enter End Date"
+                        />
+                    </div>
+
+
+                    <div class = "box-footer">
+                        <button type="submit" class = "btn btn-primary" >
+                            Submit
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+<script>
+    function submitForm() {
+        document.getElementById("myForm").submit();
+    }
+
+    function submitFormErrorCheck() {
+        const startDate = document.getElementById("startDate").value;
+        const endDate = document.getElementById("endDate").value;
+        const name = document.getElementById("name").value;
+        const intro = document.getElementById("intro").value;
+        // const status = document.getElementById("number-select").value;
+
+        console.log("startDate: " + startDate)
+        console.log("endDate: " + endDate)
+
+        if (name.trim() === "") {
+            alert("Please enter a project name.");
+            return false;
+        }
+
+        if (intro.trim() === "") {
+            alert("Please enter a project intro.");
+            return false;
+        }
+
+        if (startDate.trim() === "" || endDate.trim() === "") {
+            alert("Start date and end date cannot be null.");
+            return false;
+        }
+        else if (endDate < startDate) {
+            alert("End date should be greater than or equal to the start date.");
+            return false;
+        }
+
+        return true;
+    }
+</script>
+

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Selection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        select {
+            width: 200px;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<h1>Add Collaborator</h1>
+
+<!--<form th:action="@{/addProjectMembers/{id}(id=${project.id})}" th:object="${user}" method="post">-->
+<!--    <label for="userSelect">Select User:</label>-->
+<!--    <select id="userSelect" name="selectedUser" th:>-->
+<!--        <option value="">&#45;&#45; Select User &#45;&#45;</option>-->
+<!--        <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.username}" th:field="*{user.username}"></option>-->
+<!--    </select>-->
+
+<!--    <button type="submit">Submit</button>-->
+<!--</form>-->
+
+<form th:action="@{/addProjectMembers/{id}(id=${project.id})}" method="post" th:object="${userSelectionForm}">
+    <label for="userSelect">Select User to Add as a Collaborator:</label>
+    <select id="userSelect" name="selectedUser" th:field="*{selectedUser}">
+        <option value="">-- Select User --</option>
+        <option th:each="user : ${users}" th:value="${user.username}" th:text="${user.username}"></option>
+    </select>
+
+    <button type="submit">Submit</button>
+</form>
+
+</body>
+</html>
